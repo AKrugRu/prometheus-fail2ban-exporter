@@ -45,3 +45,27 @@ fail2ban_banned_total{jail="sshd"} 4.0
 
 ### Credits
 * Hannes Lindner, for writing the [original version](https://github.com/HannesLindner/fail2ban-export)
+
+### Установка и использование
+Установить cron:
+```bash
+sudo apt install cron
+```
+
+Создать путь куда будут сохраняться метрики:
+```
+sudo mkdir -p /var/lib/prometheus/node-exporter
+```
+
+К node_expoter сервису добавить параметр:
+```
+--collector.textfile.directory=/var/lib/prometheus/node-exporter
+```
+
+В cron добавить выполнение скрипта каждые 15 минут(метрика обновляется не так часто, интервал 15 минут приемлем)
+```
+sudo crontab -e
+
+...
+*/15 * * * * python3 /root/fail2ban-exporter.py
+```
